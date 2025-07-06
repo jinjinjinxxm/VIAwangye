@@ -1,0 +1,437 @@
+<!-- 搜索引擎按钮(外显) 开始 -->
+<style>
+.search_button{
+padding:4px 1%;margin:0 0 3px 1.7%;
+width:12.82%;display:inline-block;
+translate:0 var(--SearT) 0;}
+.search_button:first-child{margin-left:0;}
+#button_group{z-index:-1;
+translate:-50% 44px 0;
+width:calc(var(--SearWo));height:20vh;
+overflow:scroll hidden;font-size:15px;
+transition:calc(var(--Trantime) * .8) ease 1ms;
+white-space:nowrap;padding:8px 0 0;}
+:has(:is(.search_button,.opSug_wpr,#search_submit,#container_copy>.box):hover,#search_input:focus) #button_group{width:calc(var(--SearWt));
+z-index:2;height:max-content;}
+:has(:is(.search_button,.opSug_wpr,#search_submit,#container_copy>.box):hover,#search_input:focus) .search_button{translate:0 0 0;}
+</style><script>
+function createSearchButtons(config){const buttonGroup=document.createElement('div');buttonGroup.id='button_group';buttonGroup.className='url';const searchPart=document.querySelector('.search_part');const searchBar=document.querySelector('.search_bar');const searchInput=document.querySelector('#search_input');
+function openSearch(source){
+const query=searchInput.value.trim();
+if (query){window.open(config[source].searchUrl.replace('%@', encodeURIComponent(query)),'_blank');searchInput.value='';searchInput.blur();} else{window.open(config[source].homeUrl,'_blank');}}
+config.forEach((engine, index)=>{
+const button=document.createElement('div');button.className='search_button';button.textContent=engine.name;button.dataset.engineIndex=index;button.addEventListener('click',()=>{openSearch(index);});
+buttonGroup.appendChild(button);});
+searchPart.insertBefore(buttonGroup, searchBar.nextSibling);}
+
+
+
+/*搜索引擎配置*/
+const searchEngines=[
+{name: '百度',
+searchUrl: 'https://www.baidu.com/s?word=%@',
+homeUrl: 'https://www.baidu.com'},
+{name: '谷歌',
+searchUrl: 'https://www.google.com/search?q=%@',
+homeUrl: 'https://www.google.com'},
+{name: '必应',
+searchUrl: 'https://cn.bing.com/search?q=%@',
+homeUrl: 'https://cn.bing.com'},
+{name: '秘塔',
+searchUrl: 'https://metaso.cn/?q=%@',
+homeUrl: 'https://metaso.cn'},
+{name: '搜狗',
+searchUrl: 'https://wap.sogou.com/web/sl?keyword=%@',
+homeUrl: 'https://wap.sogou.com'},
+{name: '头条',
+searchUrl: 'https://so.toutiao.com/search?keyword=%@',
+homeUrl: 'https://www.toutiao.com'},
+{name: '神马',
+searchUrl: 'https://yz.m.sm.cn/s?q=%@',
+homeUrl: 'https://yz.m.sm.cn'},
+{name: '勾勾',
+searchUrl: 'https://gogo.webbillion.cn/search?q=%@',
+homeUrl: 'https://gogo.webbillion.cn'},
+{name: '云盘',
+searchUrl: 'https://alipansou.com/search?k=%@',
+homeUrl: 'https://alipansou.com'},
+{name: 'B站',
+searchUrl: 'https://www.bilibili.com/search?keyword=%@',
+homeUrl: 'https://www.bilibili.com'},
+{name: '知乎',
+searchUrl: 'https://www.zhihu.com/search?q=%@',
+homeUrl: 'https://www.zhihu.com'},
+];
+window.addEventListener('DOMContentLoaded',()=>{createSearchButtons(searchEngines);});
+</script>
+<!-- 搜索引擎按钮(外显) 结束 -->
+
+
+<!-- 搜索框右侧删字/扫码按钮 开始 -->
+<style>
+#fltBtn,#scanqr{
+right:0;border:0;height:100%;width:33px;
+background-color:transparent;}
+#fltBtn{
+height:46px;display:var(--ClearDis);
+padding-left:4px;}
+#fltBtn .url{
+transition:calc(var(--Trantime)*1.3);
+width:15px;height:15px;border-radius:100%;
+border:1px solid currentColor;}
+#fltBtn .url div{
+font-size:12px;translate:0 -3px 0;}
+:has(:is(.search_button,.opSug_wpr,#search_submit,#container_copy>.box):hover,#search_input:focus) #fltBtn .url{
+rotate:4turn;
+transition:calc(var(--Trantime)*1.3);}
+#scanqr{
+display:var(--ScanDis);padding-right:10px;}
+#scanqr .url{
+opacity:var(--ScanOpa);border-radius:calc(var(--SearRadius) - 2px);
+margin:0 auto;width:22px;height:22px;
+box-shadow:inset 0 0 3px 3px rgba(200, 200,205,0.25);}
+#scanqr .url div{
+opacity:var(--ScanOpa);translate:0 -24px 0;scale:1.2;height:100%;width:100%;
+background:linear-gradient(180deg, transparent 50%,#fff 300%);
+animation:scan calc(var(--Animation)) infinite linear;}
+@keyframes scan{to{translate:0 18px 0;}}
+</style><script>
+/*删字按钮部分*/
+window.addEventListener("load",()=>{
+input=document.querySelector("#search_input");
+document.querySelector(".search_bar>span").insertAdjacentHTML("beforebegin",`<button type=button onclick="if(input.value){input.value=input.value.replace(/[^!-}]/g,'').replace(/[^^-]]/g,'').replace(/^.*http/,'http');input.focus();} else{input.blur();}" ondblclick="const val =input.value.replace(/[^]/g,'');input.value=val;input.dispatchEvent(new InputEvent('input'));" id="fltBtn"><div class="url"><div>×</div></div></button>`);}, 0);
+/*扫码按钮部分*/
+window.addEventListener("load",()=>{document.querySelector(".search_bar>span").insertAdjacentHTML("beforebegin",`<button type=button onclick="location.assign('v://scanner');" id="scanqr"><div class="url"><div></div></div></button>`);
+input.addEventListener("blur",(e)=>{document.querySelector("#scanqr").style.display=(e.target.value.replace(/\u200B/g, '').trim()==="")?"revert-layer":"none";});},0);
+</script>
+<!-- 搜索框右侧删字/扫码按钮 结束 -->
+
+
+<!-- 聚焦搜索框方式 开始 -->
+<script>
+/*去除下滑打开地址栏↓*/
+Object.defineProperty(window,'initGesture',{value: () => null, writable: false });
+/*下滑聚焦搜索框↓*/
+document.addEventListener('DOMContentLoaded', function(){let lastClientX=0;let lastClientY=0;const inputElements=document.getElementsByTagName('input');
+const firstInput=inputElements.length>0 ? inputElements[0] : null;
+document.addEventListener('touchstart', function(e){lastClientX=e.touches[0].clientX;lastClientY=e.touches[0].clientY;}, false);
+document.addEventListener('touchmove', function(e){const touch=e.touches[0];const target=e.target;
+if (target.classList.contains('opSug_wpr')){e.preventDefault();}if ((touch.clientY - lastClientY)>150&&Math.abs(touch.clientY - lastClientY)>Math.abs(touch.clientX - lastClientX)&&touch.clientY>0&&firstInput){firstInput.focus();}}, true);});
+/*双击聚焦搜索框↓*/
+document.addEventListener('DOMContentLoaded', function(){
+let lastClickTime=0;const input=document.querySelector('#search_input');
+const book=document.querySelector('#bookmark_part');
+const searchPart=document.querySelector('.search_part');
+document.addEventListener('click', function(e){if (!searchPart.contains(e.target)&&!(book&&book.contains(e.target))){const now=Date.now();if (now - lastClickTime < 300){
+input.focus();lastClickTime=0;} else{lastClickTime=now;}}}, false);});
+/*长按搜索框聚焦↓*/
+window.addEventListener('load', function(){const si=document.querySelector('#search_input');si.addEventListener('contextmenu', function(e){if (document.activeElement !== si){e.preventDefault();si.focus();}}, false);});
+</script>
+<!-- 聚焦搜索框方式 结束 -->
+
+
+<!-- 搜索主页收藏 开始 -->
+<script>function initSearchEventListeners(searchInput, showSearchResults){const addListener=(event, useTimeout)=>{searchInput.addEventListener(event, useTimeout ? showSearchResults : () => setTimeout(showSearchResults, 0));};addListener('input', true);addListener('focus', true);addListener('blur', false);}
+function Search4Bookmarks(){const boxCo=document.querySelector('#box_container');const boxCoCopy=boxCo.cloneNode(true);
+boxCoCopy.id="container_copy";
+document.querySelector("#content").appendChild(boxCoCopy); boxCoCopy.querySelectorAll('.box>[title]').forEach(element =>{element.title=element.title.toLowerCase();});
+const searchInput=document.querySelector('#search_input');
+const style=document.createElement('style');
+style.id='S4B';document.head.append(style);
+const showSearchResults=()=>{const value=searchInput.value.toLowerCase();
+if (value){boxCo.scrollLeft=0;}
+style.innerHTML=value?`#container_copy>.box:not(:has([title*="${value}"])){width:0;margin:0;border:0;}
+#container_copy>.box:has([title*="${value}"]){margin:0 1.5% 0 0;width:calc((101.5%/var(--BMnum)) - 1.5%) !important;}
+#container_copy>.box:has([title*="${value}"]):last-child{margin-right:0;}`:'';};
+initSearchEventListeners(searchInput, showSearchResults);
+const observer=new ResizeObserver(mutations =>{mutations.forEach(mutation=>{if(mutation.borderBoxSize?.length>0){
+const rootStyle=getComputedStyle(document.querySelector(":root"));boxCoCopy.style.bottom=rootStyle.getPropertyValue("--SugY")==="auto"?'-8px':`${mutation.borderBoxSize[0].blockSize}px`;}});});observer.observe(document.querySelector('#sug_tbody'));}
+document.addEventListener("DOMContentLoaded",Search4Bookmarks);
+</script>
+<!-- 搜索主页收藏 结束 -->
+
+
+<!-- 收起输入法时取消聚焦 开始-->
+<script>function debounce(call,delay){let id=-1;return ()=>{if(id!==-1){clearTimeout(id);}
+id=setTimeout(()=>{call();id=-1;},delay);};}
+const portraitQuery=window.matchMedia("(orientation: portrait)");
+let portrait=portraitQuery.matches;let currentHeight=window.innerHeight;
+window.addEventListener("resize",debounce(()=>{if(portraitQuery.matches === portrait){const delta=Math.abs(window.innerHeight - currentHeight);if(delta>150){if(window.innerHeight>=currentHeight){document.querySelector("#search_input").blur();}currentHeight=window.innerHeight;}}else{portrait=portraitQuery.matches;currentHeight=window.innerHeight;}}),);
+</script>
+<!-- 收起输入法时取消聚焦 结束-->
+
+
+<!-- 长按聚焦唤出输入法 开始 -->
+<script>document.addEventListener('DOMContentLoaded',()=>{const s=':is(.search_button,.opSug_wpr,#search_submit,#container_copy>.box)',d=document,i=d.querySelector('#search_input'),u='\u200B';i.value=u;let h,p;
+d.addEventListener('mouseover',e=>h=e.target.closest(s));d.addEventListener('mouseout',()=>h=null);d.addEventListener('touchstart',e=>p=d.elementFromPoint(e.touches[0].clientX,e.touches[0].clientY),{passive:1});
+i.addEventListener('focus',()=>setTimeout(()=>{if(!h&&!p?.closest(s)&&i.value.includes(u)){i.value=i.value.replace(/\u200B/g,'');i.dispatchEvent(new Event('input',{bubbles:1}))}},40));i.addEventListener('blur',()=>setTimeout(()=>{if(!i.value.trim()&&!h&&!p?.closest(s)){
+i.value=u;}},40));new MutationObserver(()=>i.value.includes(u)&&i.dispatchEvent(new Event('input')))
+.observe(i,{characterData:1})});</script>
+<!-- 长按聚焦唤出输入法 结束 -->
+
+
+<!-- 主页收藏背景透明度修复 开始 -->
+<script>document.addEventListener("DOMContentLoaded",()=>{const books=document.querySelectorAll(".title");
+books.forEach((book)=>{book.style.backgroundColor=`rgba(${getComputedStyle(book).backgroundColor.split("(")[1].slice(0,-1)},var(--Opacity))`;});});
+</script>
+<!-- 主页收藏背景透明度修复 结束 -->
+
+
+<!-- 修改主页地址栏标题-->
+<script>document.title="";</script>
+
+<!-- 地址栏毒鸡汤-->
+    <style>#search_input{color:red;}</style>
+    <script>
+        document.addEventListener('DOMContentLoaded',()=>{
+            const r=Math.floor(Math.random()*2020);
+            fetch(`https://cdn.jsdelivr.net/gh/gogobody/dujitang/data/soul_${r}.json?t=${Date.now()}`)
+                .then(r=>r.json()).then(d=>{
+                    document.title=d.data[0].content;
+                    document.getElementById('search_input').placeholder=d.data[0].content;
+                });
+        });
+    </script>
+
+
+
+<!--点击打开小书签的logo-->
+    <a class="logo" id="logo" href="javascript:via.cmd(257)"></a>
+    <script>
+        var words = ['精神点', '好样的', '别丢份'];// 获取元素
+        var logo = document.getElementById('logo'); // 初始随机文本
+        logo.textContent = words[Math.floor(Math.random() * words.length)]; // 点击事件：每次点击随机更换
+        logo.addEventListener('click', function() {
+        this.textContent = words[Math.floor(Math.random() * words.length)];
+        }); </script>
+
+<!--自己瞎弄的三天天气预报-->
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    </head>
+<body>
+    <div class="weather-card">
+        <div class="loader" id="loader">
+            <div class="spinner"></div>
+        </div>
+        
+        <div class="error-message" id="errorMessage">
+            无法获取天气数据，请双击中间卡片重试
+        </div>
+        
+        <div class="forecast-container">
+
+<div class="location-card">
+    <div class="location-name">
+        <span>吴</span>
+        <span>中</span>
+        <span>区</span>
+    </div>
+</div>
+
+
+            <div class="day-forecast" id="day0">
+                <div class="weather-info">
+                    <div class="weather-icon"><i class="fas fa-sun"></i></div>
+                    <div class="weather-desc" id="weatherDay0">--</div>
+                    <div class="temperature">
+                        <span class="min-temp" id="minTempDay0">--°</span>
+                        <span class="temp-divider">~</span>
+                        <span class="max-temp" id="maxTempDay0">--°</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="day-forecast" id="day1">
+                <div class="weather-info">
+                    <div class="weather-icon"><i class="fas fa-cloud-sun"></i></div>
+                    <div class="weather-desc" id="weatherDay1">--</div>
+                    <div class="temperature">
+                        <span class="min-temp" id="minTempDay1">--°</span>
+                        <span class="temp-divider">~</span>
+                        <span class="max-temp" id="maxTempDay1">--°</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="day-forecast" id="day2">
+                <div class="weather-info">
+                    <div class="weather-icon"><i class="fas fa-cloud-rain"></i></div>
+                    <div class="weather-desc" id="weatherDay2">--</div>
+                    <div class="temperature">
+                        <span class="min-temp" id="minTempDay2">--°</span>
+                        <span class="temp-divider">~</span>
+                        <span class="max-temp" id="maxTempDay2">--°</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // API配置
+        const API_KEY = '098aff643a684c8bac04f63452c5d1c1';
+        const BASE_URL = 'https://p43dn5ygxt.re.qweatherapi.com/v7/weather/3d';
+        const LOCATION_ID = '101190405'; // 吴中区
+        
+        // 天气图标映射
+        const weatherIcons = {
+            '晴': 'fa-sun',
+            '多云': 'fa-cloud-sun',
+            '阴': 'fa-cloud',
+            '小雨': 'fa-cloud-rain',
+            '中雨': 'fa-cloud-showers-heavy',
+            '大雨': 'fa-cloud-showers-heavy',
+            '暴雨': 'fa-cloud-showers-heavy',
+            '雷阵雨': 'fa-bolt',
+            '雪': 'fa-snowflake',
+            '小雪': 'fa-snowflake',
+            '中雪': 'fa-snowflake',
+            '大雪': 'fa-snowflake',
+            '雾': 'fa-smog',
+            '霾': 'fa-smog',
+            '沙尘': 'fa-wind',
+            '浮尘': 'fa-wind'
+        };
+        
+        // DOM元素
+        const loader = document.getElementById('loader');
+        const errorMessage = document.getElementById('errorMessage');
+        
+        // 获取并显示天气数据
+        async function fetchWeatherData() {
+            // 显示加载动画
+            loader.classList.add('active');
+            errorMessage.style.display = 'none';
+            
+            try {
+                // 使用正确的查询参数格式
+                const apiUrl = `${BASE_URL}?location=${LOCATION_ID}`;
+                const response = await fetch(apiUrl, {
+                    method: 'GET',
+                    headers: {
+                        'X-QW-Api-Key': API_KEY,
+                        'Accept-Encoding': 'gzip',
+                        'Accept': 'application/json'
+                    }
+                });
+                
+                if (!response.ok) {
+                    throw new Error(`API请求失败: ${response.status}`);
+                }
+                
+                const data = await response.json();
+                
+                // 检查数据有效性
+                if (!data.daily || data.daily.length < 3) {
+                    throw new Error('API返回数据不完整');
+                }
+                
+                // 更新三天的天气预报
+                for (let i = 0; i < 3; i++) {
+                    const dayData = data.daily[i];
+                    
+                    // 更新天气描述
+                    document.getElementById(`weatherDay${i}`).textContent = dayData.textDay;
+                    
+                    // 更新温度
+                    document.getElementById(`minTempDay${i}`).textContent = dayData.tempMin + "°";
+                    document.getElementById(`maxTempDay${i}`).textContent = dayData.tempMax + "°";
+                    
+                    // 更新天气图标
+                    const iconClass = weatherIcons[dayData.textDay] || 'fa-cloud-sun';
+                    document.querySelectorAll('.weather-icon')[i].innerHTML = `<i class="fas ${iconClass}"></i>`;
+                }
+                
+                console.log('天气数据更新成功');
+            } catch (error) {
+                console.error('获取天气数据失败:', error);
+                errorMessage.textContent = `无法获取天气数据: ${error.message}`;
+                errorMessage.style.display = 'block';
+                
+                // 清空所有天气数据
+                for (let i = 0; i < 3; i++) {
+                    document.getElementById(`weatherDay${i}`).textContent = "--";
+                    document.getElementById(`minTempDay${i}`).textContent = "--°";
+                    document.getElementById(`maxTempDay${i}`).textContent = "--°";
+                    document.querySelectorAll('.weather-icon')[i].innerHTML = `<i class="fas fa-question"></i>`;
+                }
+            } finally {
+                // 隐藏加载动画
+                loader.classList.remove('active');
+            }
+        }
+        
+        // 打开日历应用
+        function openCalendarApp() {
+            try {
+                // 使用Intent打开日历应用
+                const intentUrl = `intent://com.android.calendar.AllInOneActivity#Intent;scheme=launcher;package=com.coloros.calendar;component=com.coloros.calendar/com.android.calendar.AllInOneActivity;end`;
+                window.location.href = intentUrl;
+                
+                console.log('正在打开日历应用...');
+            } catch (e) {
+                console.error('打开日历应用失败:', e);
+                alert('打开日历应用失败，请确保已安装日历应用');
+            }
+        }
+        
+        // 打开天气应用
+        function openWeatherApp() {
+            try {
+                // 使用Intent打开天气应用
+                const intentUrl = `intent://com.oplus.weather.main.view.WeatherMainActivity#Intent;scheme=launcher;package=com.coloros.weather2;component=com.coloros.weather2/com.oplus.weather.main.view.WeatherMainActivity;end`;
+                window.location.href = intentUrl;
+                
+                console.log('正在打开天气应用...');
+            } catch (e) {
+                console.error('打开天气应用失败:', e);
+                alert('打开天气应用失败，请确保已安装天气应用');
+            }
+        }
+        
+        // 初始化
+        document.addEventListener('DOMContentLoaded', () => {
+            // 初始加载数据
+            fetchWeatherData();
+            
+            // 第一个卡片点击打开日历应用
+            document.getElementById('day0').addEventListener('click', () => {
+                openCalendarApp();
+            });
+            
+            // 第二个卡片双击刷新
+            const day1Card = document.getElementById('day1');
+            let lastTap = 0;
+            day1Card.addEventListener('click', () => {
+                const currentTime = new Date().getTime();
+                const tapLength = currentTime - lastTap;
+                
+                // 判断是否为双击（300ms内两次点击）
+                if (tapLength < 300 && tapLength > 0) {
+                    fetchWeatherData();
+                    // 添加视觉反馈
+                    day1Card.style.transform = 'scale(0.95)';
+                    setTimeout(() => {
+                        day1Card.style.transform = '';
+                    }, 200);
+                }
+                
+                lastTap = currentTime;
+            });
+            
+            // 第三个卡片点击打开天气应用
+            document.getElementById('day2').addEventListener('click', () => {
+                openWeatherApp();
+            });
+        });
+    </script>
+
+
+
+
+<!--主页全屏飘雪 开始-->
+<script type="text/javascript" language="javascript">
+(function(){function k(a,b,c){if(a.addEventListener)a.addEventListener(b,c,false);else a.attachEvent&&a.attachEvent("on"+b,c)}function g(a){if(typeof window.onload!="function")window.onload=a;else{var b=window.onload;window.onload=function(){b();a()}}}function h(){var a={};for(type in{Top:"",Left:""}){var b=type=="Top"?"Y":"X";if(typeof window["page"+b+"Offset"]!="undefined")a[type.toLowerCase()]=window["page"+b+"Offset"];else{b=document.documentElement.clientHeight?document.documentElement:document.body; a[type.toLowerCase()]=b["scroll"+type]}}return a}function l(){var a=document.body,b;if(window.innerHeight)b=window.innerHeight;else if(a.parentElement.clientHeight)b=a.parentElement.clientHeight;else if(a&&a.clientHeight)b=a.clientHeight;return b}function i(a){this.parent=document.body;this.createEl(this.parent,a);this.size=Math.random()*5+5;this.el.style.width=Math.round(this.size)+"px";this.el.style.height=Math.round(this.size)+"px";this.maxLeft=document.body.offsetWidth-this.size;this.maxTop=document.body.offsetHeight- this.size;this.left=Math.random()*this.maxLeft;this.top=h().top+1;this.angle=1.4+0.2*Math.random();this.minAngle=1.4;this.maxAngle=1.6;this.angleDelta=0.01*Math.random();this.speed=2+Math.random()}var j=false;g(function(){j=true});var f=true;window.createSnow=function(a,b){if(j){var c=[],m=setInterval(function(){f&&b>c.length&&Math.random()<b*0.0025&&c.push(new i(a));!f&&!c.length&&clearInterval(m);for(var e=h().top,n=l(),d=c.length-1;d>=0;d--)if(c[d])if(c[d].top<e||c[d].top+c[d].size+1>e+n){c[d].remove(); c[d]=null;c.splice(d,1)}else{c[d].move();c[d].draw()}},40);k(window,"scroll",function(){for(var e=c.length-1;e>=0;e--)c[e].draw()})}else g(function(){createSnow(a,b)})};window.removeSnow=function(){f=false};i.prototype={createEl:function(a,b){this.el=document.createElement("img");this.el.setAttribute("src",b+"http://mimg.127.net/hxm/quan/hd/111207_sdj/style/img/snow.gif");this.el.style.position="absolute";this.el.style.display="block";this.el.style.zIndex="99999";this.parent.appendChild(this.el)},move:function(){if(this.angle< this.minAngle||this.angle>this.maxAngle)this.angleDelta=-this.angleDelta;this.angle+=this.angleDelta;this.left+=this.speed*Math.cos(this.angle*Math.PI);this.top-=this.speed*Math.sin(this.angle*Math.PI);if(this.left<0)this.left=this.maxLeft;else if(this.left>this.maxLeft)this.left=0},draw:function(){this.el.style.top=Math.round(this.top)+"px";this.el.style.left=Math.round(this.left)+"px"},remove:function(){this.parent.removeChild(this.el);this.parent=this.el=null}}})();createSnow("", 30); </script>
+<!--主页全屏飘雪 结束-->
